@@ -6,8 +6,13 @@ int main()
 	Operand_Factory_Tests();
 	std::cout << std::endl;
 	
-	
 	std::cout << "Operand_Calculation_Tests:" << std::endl;
 	Operand_Calculation_Tests();
 	std::cout << std::endl;
+	
+	std::cout << "Abstract_Vm_Stack_Tests:" << std::endl;
+	Abstract_Vm_Stack_Tests();
+	std::cout << std::endl;
+	
+	return 0;
 }

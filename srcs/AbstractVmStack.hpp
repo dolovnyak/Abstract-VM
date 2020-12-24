@@ -1,12 +1,12 @@
 #pragma once
 
-#include "IOperand.hpp"
 #include "OperandFactory.hpp"
 #include <deque>
 
 class AbstractVmStack
 {
 public:
+	//TODO coplien form
 	void Push(OperandType opType, const std::string& value);
 	void Pop();
 	void Dump();
@@ -21,4 +21,6 @@ public:
 	
 private:
 	std::deque<const IOperand*> _stack;
+	
+	void Calculation(Operator opType);
 };

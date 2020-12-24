@@ -24,5 +24,6 @@ public:
 	virtual bool operator==(const IOperand& rhs ) const = 0; // Equal
 	virtual bool operator!=(const IOperand& rhs ) const = 0; // Equal
 	virtual const std::string& ToString(void) const = 0; // String representation of the instance
+	virtual const std::string& ToStringWithPrecision(void) const = 0; // String representation of the instance
 	virtual ~IOperand(void) {}
 };

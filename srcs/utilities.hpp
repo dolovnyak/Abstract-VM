@@ -17,6 +17,16 @@
 #define BG_CYAN std::string("\e[46m")
 #define BG_DEFAULT std::string("\e[49m")
 
+
+enum Operator
+{
+	Addition = 0,
+	Subtraction,
+	Multiplication,
+	Division,
+	Mod
+};
+
 template<typename T>
 void Print_Success(T val)
 {

@@ -3,20 +3,12 @@
 #include "IOperand.hpp"
 #include "OperandFactory.hpp"
 
-enum Operator
-{
-	Addition = 0,
-	Subtraction,
-	Multiplication,
-	Division,
-	Mod
-};
 
 template<typename T>
 class Operand : public IOperand
 {
 public:
-	Operand<T>(OperandType type, T value, const std::string& strValue);
+	Operand<T>(OperandType type, T value);
 	Operand<T>(const Operand<T>& op);
 	Operand<T>& operator=(const Operand<T>& op);
 	virtual ~Operand<T>() {}
@@ -36,10 +28,12 @@ public:
 	int GetPrecision(void) const override { return (int)GetType(); }
 	OperandType GetType(void) const override { return _type; }
 	const std::string& ToString(void) const override { return _strValue; }
+	const std::string& ToStringWithPrecision(void) const override { return _strValueWithFullPrecision; }
 
 private:
 	T _value;
 	std::string _strValue;
+	std::string _strValueWithFullPrecision;
 	OperandType _type;
 	
 	Operand<T>() {}
@@ -50,8 +44,18 @@ private:
 
 
 template<typename T>
-Operand<T>::Operand(OperandType type, T value, const std::string& strValue) : _type(type), _value(value), _strValue(strValue)
+Operand<T>::Operand(OperandType type, T value) : _type(type), _value(value)
 {
+	if (!IsFractional(type))
+	{
+		_strValue = std::to_string(value);
+		_strValueWithFullPrecision = _strValue;
+	}
+	else
+	{
+		_strValue = to_string_precision(value, 2);
+		_strValueWithFullPrecision = to_string_precision(value);
+	}
 }
 
 template<typename T>
@@ -83,12 +87,12 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 					(maxType, std::to_string(static_cast<int64_t>(_value) * secondOpValue));
 				case Operator::Division:
 					if (secondOpValue == 0)
-						throw std::logic_error("Division by 0");
+						throw std::logic_error("division by 0");
 					return OperandFactory::CreateOperand
 					(maxType, std::to_string(static_cast<int64_t>(_value) / secondOpValue));
 				case Operator::Mod:
 					if (secondOpValue == 0)
-						throw std::logic_error("Mod by 0");
+						throw std::logic_error("mod by 0");
 					return OperandFactory::CreateOperand
 					(maxType, std::to_string(static_cast<int64_t>(_value) % secondOpValue));
 			}
@@ -112,11 +116,11 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 					(maxType, to_string_precision(static_cast<long double>(_value) * secondOpValue));
 				case Operator::Division:
 					if (secondOpValue == 0)
-						throw std::logic_error("Division by 0");
+						throw std::logic_error("division by 0");
 					return OperandFactory::CreateOperand
 					(maxType, to_string_precision(static_cast<long double>(_value) / secondOpValue));
 				case Operator::Mod:
-					throw std::logic_error("Mod doesn't correct with fractional values");
+					throw std::logic_error("mod doesn't correct with fractional values");
 			}
 		}
 		throw std::logic_error("operator type doesn't correct");

@@ -21,4 +21,5 @@ add_executable(abstract_vm_tests
         tests/main.cpp
         tests/Operand_Factory_Tests.cpp
         tests/Operand_Calculation_Tests.cpp
+        tests/Abstract_Vm_Stack_Tests.cpp
         )

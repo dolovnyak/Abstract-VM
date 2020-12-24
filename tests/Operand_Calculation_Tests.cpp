@@ -185,7 +185,7 @@ void Division_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "Division by 0"));
+		assert(contains(e.what(), "division by 0"));
 	}
 	
 	try
@@ -200,7 +200,7 @@ void Division_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "Division by 0"));
+		assert(contains(e.what(), "division by 0"));
 	}
 	
 	try
@@ -279,7 +279,7 @@ void Modulo_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "Mod by 0"));
+		assert(contains(e.what(), "mod by 0"));
 	}
 	
 	firstValue = "124";
