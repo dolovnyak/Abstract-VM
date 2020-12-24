@@ -15,6 +15,21 @@ void Addition_Tests()
 	assert(resultOp->GetType() == OperandType::Double);
 	assert(dynamic_cast<const Operand<double>*>(resultOp)->GetValue() == std::stof(firstValue) + std::stod(secondValue));
 	
+	try
+	{
+		firstValue = "-105";
+		secondValue = "81";
+		
+		firstOp = OperandFactory::CreateOperand(OperandType::Int8, firstValue);
+		secondOp = OperandFactory::CreateOperand(OperandType::Int8, secondValue);
+		
+		*firstOp - *secondOp; //exception
+		assert(false);
+	}
+	catch (const std::exception& e)
+	{
+		assert(contains(e.what(), "out of range"));
+	}
 	
 	firstValue = "124";
 	secondValue = "124512.25235";
@@ -52,6 +67,22 @@ void Subtraction_Tests()
 	assert(resultOp->GetType() == OperandType::Double);
 	assert(dynamic_cast<const Operand<double>*>(resultOp)->GetValue() == std::stof(firstValue) - std::stod(secondValue));
 	
+	try
+	{
+		firstValue = "1051453452342134111251252353456234786745645756521251251255234.124";
+		secondValue = "812352354124132152512521512131242354.76874532";
+		
+		firstOp = OperandFactory::CreateOperand(OperandType::Float, firstValue);
+		secondOp = OperandFactory::CreateOperand(OperandType::Float, secondValue);
+		std::cout << "A" << std::endl;
+		
+		*firstOp + *secondOp; //exception
+		assert(false);
+	}
+	catch (const std::exception& e)
+	{
+		assert(contains(e.what(), "out of range"));
+	}
 	
 	firstValue = "124";
 	secondValue = "124512.25235";
@@ -89,6 +120,21 @@ void Multiplication_Tests()
 	assert(resultOp->GetType() == OperandType::Double);
 	assert(dynamic_cast<const Operand<double>*>(resultOp)->GetValue() == std::stof(firstValue) * std::stod(secondValue));
 	
+	try
+	{
+		firstValue = "1125";
+		secondValue = "5512";
+		
+		firstOp = OperandFactory::CreateOperand(OperandType::Int16, firstValue);
+		secondOp = OperandFactory::CreateOperand(OperandType::Int16, secondValue);
+		
+		*firstOp * *secondOp; //exception
+		assert(false);
+	}
+	catch (const std::exception& e)
+	{
+		assert(contains(e.what(), "out of range"));
+	}
 	
 	firstValue = "124";
 	secondValue = "124512.25235";
@@ -128,8 +174,8 @@ void Division_Tests()
 	
 	try
 	{
-		std::string firstValue = "1214";
-		std::string secondValue = "0";
+		firstValue = "1214";
+		secondValue = "0";
 		firstOp = OperandFactory::CreateOperand(OperandType::Int16, firstValue);
 		secondOp = OperandFactory::CreateOperand(OperandType::Int32, secondValue);
 		assert(secondOp->GetPrecision() > firstOp->GetPrecision());
@@ -144,17 +190,33 @@ void Division_Tests()
 	
 	try
 	{
-		std::string firstValue = "121.2144";
-		std::string secondValue = "0";
+		firstValue = "121.2144";
+		secondValue = "0";
 		firstOp = OperandFactory::CreateOperand(OperandType::Float, firstValue);
 		secondOp = OperandFactory::CreateOperand(OperandType::Int32, secondValue);
 		
-		resultOp = *firstOp / *secondOp;
+		*firstOp / *secondOp;
 		assert(false);
 	}
 	catch (const std::exception& e)
 	{
 		assert(contains(e.what(), "Division by 0"));
+	}
+	
+	try
+	{
+		firstValue= "199999999999999999999536434353464356.2144";
+		secondValue = "0.000000000000000000000124124";
+		
+		firstOp = OperandFactory::CreateOperand(OperandType::Float, firstValue);
+		secondOp = OperandFactory::CreateOperand(OperandType::Float, secondValue);
+		
+		*firstOp / *secondOp; //exception
+		assert(false);
+	}
+	catch (const std::exception& e)
+	{
+		assert(contains(e.what(), "out of range"));
 	}
 	
 	
