@@ -15,8 +15,9 @@ const IOperand* OperandFactory::CreateOperand(OperandType type, const std::strin
 			return CreateFloat(value);
 		case OperandType::Double:
 			return CreateDouble(value);
+		case Incorrect:
+			throw std::logic_error("Operand type is incorrect");
 	}
-	throw std::logic_error("Operand type doesn't correct");
 }
 
 //stoi, stof, stod have "out of range" exception

@@ -4,7 +4,8 @@
 
 enum OperandType
 {
-	Int8 = 0,
+	Incorrect = 0,
+	Int8,
 	Int16,
 	Int32,
 	Float,

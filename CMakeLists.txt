@@ -9,6 +9,7 @@ set(PROJECT_SOURCES
         srcs/AbstractVmStack.cpp
         srcs/OperandFactory.cpp
         srcs/utilities.cpp
+        srcs/CommandList.cpp
         )
 
 add_executable(abstract_vm

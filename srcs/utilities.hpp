@@ -44,4 +44,15 @@ std::string to_string_precision(const T a_value, const int n = 100)
 	return out.str();
 }
 
+template <class Container>
+void split(const std::string& str, Container& cont, char delimiter = ' ')
+{
+	std::stringstream ss(str);
+	std::string token;
+	while (std::getline(ss, token, delimiter))
+	{
+		cont.push_back(token);
+	}
+}
+
 bool contains(const std::string& orig, const std::string& income);
