@@ -9,7 +9,7 @@ void AbstractVmStack::Push(OperandType opType, const std::string& value)
 void AbstractVmStack::Pop()
 {
 	if (_stack.empty())
-		throw std::logic_error("pop when stack is empty");
+		throw PopOnEmptyStack();
 	
 	delete _stack.front();
 	_stack.pop_front();
@@ -28,10 +28,10 @@ void AbstractVmStack::Assert(OperandType opType, const std::string& value)
 	const IOperand* tmpOp = OperandFactory::CreateOperand(opType, value);
 	
 	if (_stack.empty())
-		throw std::logic_error("assert instruction when stack is empty");
+		throw AssertOnEmptyStack(opType, value);
 	
 	if (*tmpOp != *_stack.front())
-		throw std::logic_error("assert instruction is not true");
+		throw AssertFailure(opType, value);
 	
 	delete tmpOp;
 }
@@ -63,8 +63,11 @@ void AbstractVmStack::Mod()
 
 void AbstractVmStack::Print()
 {
+	if (_stack.empty())
+		throw PrintOnEmptyStack();
+	
 	if (_stack.front()->GetType() != OperandType::Int8)
-		throw std::logic_error("try to print non 8-bit integer");
+		throw PrintNotCorrectType(_stack.front()->GetType(), _stack.front()->ToString());
 	
 	std::cout << static_cast<char>(std::stoi(_stack.front()->ToString())) << std::endl;
 }
@@ -74,32 +77,31 @@ void AbstractVmStack::Exit()
 	while (!_stack.empty())
 		this->Pop();
 	
-	//TODO
 	exit(0);
 }
 
 void AbstractVmStack::Calculation(Operator opType)
 {
-	if (_stack.size() <= 2)
-		throw std::logic_error("stack is composed of strictly less that two values when an arithmetic instruction is executed");
+	if (_stack.size() < 2)
+		throw LowerThenTwoArgumentsCalculation(opType);
 	
 	const IOperand* tmpOp;
 	switch (opType)
 	{
 		case Operator::Addition:
-			tmpOp = *_stack[0] + *_stack[1];
+			tmpOp = *_stack[1] + *_stack[0];
 			break;
 		case Operator::Subtraction:
-			tmpOp = *_stack[0] - *_stack[1];
+			tmpOp = *_stack[1] - *_stack[0];
 			break;
 		case Operator::Multiplication:
-			tmpOp = *_stack[0] * *_stack[1];
+			tmpOp = *_stack[1] * *_stack[0];
 			break;
 		case Operator::Division:
-			tmpOp = *_stack[0] / *_stack[1];
+			tmpOp = *_stack[1] / *_stack[0];
 			break;
 		case Operator::Mod:
-			tmpOp = *_stack[0] % *_stack[1];
+			tmpOp = *_stack[1] % *_stack[0];
 			break;
 	}
 	
@@ -107,4 +109,45 @@ void AbstractVmStack::Calculation(Operator opType)
 	this->Pop();
 	
 	_stack.push_front(tmpOp);
+}
+
+AbstractVmStack::StackException::StackException(const std::string& strException)
+: _strException("Stack exception: " + strException)
+{
+}
+
+const char* AbstractVmStack::StackException::what() const throw()
+{
+	return _strException.c_str();
+}
+
+AbstractVmStack::PopOnEmptyStack::PopOnEmptyStack()
+: StackException("try pop when stack is empty")
+{
+}
+
+
+AbstractVmStack::AssertOnEmptyStack::AssertOnEmptyStack(OperandType operandType, const std::string& value)
+: StackException("try assert when stack is empty " + to_string(operandType, value))
+{
+}
+
+AbstractVmStack::AssertFailure::AssertFailure(OperandType operandType, const std::string& value)
+: StackException("assert failure " + to_string(operandType, value))
+{
+}
+
+AbstractVmStack::LowerThenTwoArgumentsCalculation::LowerThenTwoArgumentsCalculation(Operator operatorType)
+: StackException("try " + to_string(operatorType) + "when stack has lower than two values")
+{
+}
+
+AbstractVmStack::PrintOnEmptyStack::PrintOnEmptyStack()
+: StackException("try print when stack is empty")
+{
+}
+
+AbstractVmStack::PrintNotCorrectType::PrintNotCorrectType(OperandType operandType, const std::string& value)
+: StackException("try print incorrect value" + to_string(operandType, value))
+{
 }

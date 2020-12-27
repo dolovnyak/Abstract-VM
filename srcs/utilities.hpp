@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+#include "IOperand.hpp"
 
 #define TEXT_RED std::string("\e[91m")
 #define TEXT_GREEN std::string("\e[92m")
@@ -56,3 +57,8 @@ void split(const std::string& str, Container& cont, char delimiter = ' ')
 }
 
 bool contains(const std::string& orig, const std::string& income);
+bool isFractional(OperandType type);
+std::string to_string(Operator op);
+std::string to_string(OperandType type);
+std::string to_string(OperandType type, const std::string& value);
+std::string to_string(const IOperand& op);

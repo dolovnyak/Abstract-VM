@@ -3,7 +3,6 @@
 #include "IOperand.hpp"
 #include "OperandFactory.hpp"
 
-
 template<typename T>
 class Operand : public IOperand
 {
@@ -29,7 +28,7 @@ public:
 	OperandType GetType(void) const override { return _type; }
 	const std::string& ToString(void) const override { return _strValue; }
 	const std::string& ToStringWithPrecision(void) const override { return _strValueWithFullPrecision; }
-
+	
 private:
 	T _value;
 	std::string _strValue;
@@ -37,16 +36,14 @@ private:
 	OperandType _type;
 	
 	Operand<T>() {}
-	static bool IsFractional(OperandType type);
 	static long double GetFractionalValue(const IOperand& op);
 	static int64_t GetIntegerValue(const IOperand& op);
 };
 
-
 template<typename T>
 Operand<T>::Operand(OperandType type, T value) : _type(type), _value(value)
 {
-	if (!IsFractional(type))
+	if (!isFractional(type))
 	{
 		_strValue = std::to_string(value);
 		_strValueWithFullPrecision = _strValue;
@@ -70,7 +67,7 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 	{
 		OperandType maxType = this->GetPrecision() > rightOperand.GetPrecision() ? this->GetType() : rightOperand.GetType();
 		
-		if (!IsFractional(maxType))
+		if (!isFractional(maxType))
 		{
 			int64_t secondOpValue = static_cast<int64_t>(GetIntegerValue(rightOperand));
 			
@@ -87,7 +84,7 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 					(maxType, std::to_string(static_cast<int64_t>(_value) * secondOpValue));
 				case Operator::Division:
 					if (secondOpValue == 0)
-						throw std::logic_error("division by 0");
+						throw DivisionByZero(*this, rightOperand);
 					return OperandFactory::CreateOperand
 					(maxType, std::to_string(static_cast<int64_t>(_value) / secondOpValue));
 				case Operator::Mod:
@@ -99,7 +96,7 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 		}
 		else
 		{
-			long double secondOpValue = IsFractional(rightOperand.GetType()) ?
+			long double secondOpValue = isFractional(rightOperand.GetType()) ?
 					static_cast<long double>(GetFractionalValue(rightOperand)) :
 					static_cast<long double>(GetIntegerValue(rightOperand));
 					
@@ -145,14 +142,6 @@ long double Operand<T>::GetFractionalValue(const IOperand& op)
 		return static_cast<long double>(dynamic_cast<const Operand<float>*>(&op)->GetValue());
 	
 	return static_cast<long double>(dynamic_cast<const Operand<double>*>(&op)->GetValue());
-}
-
-template<typename T>
-bool Operand<T>::IsFractional(OperandType type)
-{
-	if (type == OperandType::Float || type == OperandType::Double)
-		return true;
-	return false;
 }
 
 template<typename T>

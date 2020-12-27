@@ -14,5 +14,9 @@ int main()
 	Abstract_Vm_Stack_Tests();
 	std::cout << std::endl;
 	
+	std::cout << "Command_List_Tests:" << std::endl;
+	Command_List_Tests();
+	std::cout << std::endl;
+	
 	return 0;
 }

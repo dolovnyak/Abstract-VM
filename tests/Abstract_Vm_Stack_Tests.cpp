@@ -130,13 +130,13 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	try
 	{
 		vmStack.Sub();
-		vmStack.Assert(OperandType::Double, to_string_precision(std::stod(v5) - std::stof(v4)));
+		vmStack.Assert(OperandType::Double, to_string_precision(std::stof(v4) - std::stod(v5)));
 		vmStack.Sub();
-		vmStack.Assert(OperandType::Double, to_string_precision(std::stod(v5) - std::stof(v4) - std::stoi(v3)));
+		vmStack.Assert(OperandType::Double, to_string_precision(std::stoi(v3) - (std::stof(v4) - std::stod(v5))));
 		vmStack.Sub();
-		vmStack.Assert(OperandType::Double, to_string_precision(std::stod(v5) - std::stof(v4) - std::stoi(v3) - std::stoi(v2)));
+		vmStack.Assert(OperandType::Double, to_string_precision(std::stoi(v2) - (std::stoi(v3) - (std::stof(v4) - std::stod(v5)))));
 		vmStack.Sub();
-		vmStack.Assert(OperandType::Double, to_string_precision(std::stod(v5) - std::stof(v4) - std::stoi(v3) - std::stoi(v2) - std::stoi(v1)));
+		vmStack.Assert(OperandType::Double, to_string_precision(std::stoi(v1) - (std::stoi(v2) - (std::stoi(v3) - (std::stof(v4) - std::stod(v5))))));
 		vmStack.Sub();
 		assert(false);
 	}
@@ -178,13 +178,13 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	try
 	{
 		vmStack.Div();
-		vmStack.Assert(OperandType::Double, to_string_precision(std::stod(v5) / std::stof(v4)));
+		vmStack.Assert(OperandType::Double, to_string_precision(std::stof(v4) / std::stod(v5)));
 		vmStack.Div();
-		vmStack.Assert(OperandType::Double, to_string_precision(std::stod(v5) / std::stof(v4) / std::stoi(v3)));
+		vmStack.Assert(OperandType::Double, to_string_precision(std::stoi(v3) / (std::stof(v4) / std::stod(v5))));
 		vmStack.Div();
-		vmStack.Assert(OperandType::Double, to_string_precision(std::stod(v5) / std::stof(v4) / std::stoi(v3) / std::stoi(v2)));
+		vmStack.Assert(OperandType::Double, to_string_precision(std::stoi(v2) / (std::stoi(v3) / (std::stof(v4) / std::stod(v5)))));
 		vmStack.Div();
-		vmStack.Assert(OperandType::Double, to_string_precision(std::stod(v5) / std::stof(v4) / std::stoi(v3) / std::stoi(v2) / std::stoi(v1)));
+		vmStack.Assert(OperandType::Double, to_string_precision(std::stoi(v1) / (std::stoi(v2) / (std::stoi(v3) / (std::stof(v4) / std::stod(v5))))));
 		vmStack.Div();
 		assert(false);
 	}
@@ -222,9 +222,9 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	try
 	{
 		vmStack.Mod();
-		vmStack.Assert(OperandType::Int32, std::to_string(std::stoi(v3) % std::stoi(v2)));
+		vmStack.Assert(OperandType::Int32, std::to_string(std::stoi(v2) % std::stoi(v3)));
 		vmStack.Mod();
-		vmStack.Assert(OperandType::Int32, std::to_string(std::stoi(v3) % std::stoi(v2) % std::stoi(v1)));
+		vmStack.Assert(OperandType::Int32, std::to_string(std::stoi(v1) % (std::stoi(v2) % std::stoi(v3))));
 		vmStack.Mod();
 		assert(false);
 	}
@@ -241,6 +241,18 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	catch (const std::exception& e)
 	{
 		assert(contains(e.what(), "pop when stack is empty"));
+	}
+	
+	try
+	{
+		vmStack.Push(OperandType::Int32, "642");
+		vmStack.Push(OperandType::Int32, "62512");
+		vmStack.Add();
+		vmStack.Assert(OperandType::Int32, std::to_string(std::stoi("642") + std::stoi("62512")));
+	}
+	catch (const std::exception& e)
+	{
+		assert(false);
 	}
 }
 

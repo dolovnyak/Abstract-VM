@@ -23,4 +23,10 @@ add_executable(abstract_vm_tests
         tests/Operand_Factory_Tests.cpp
         tests/Operand_Calculation_Tests.cpp
         tests/Abstract_Vm_Stack_Tests.cpp
+        tests/Command_List_Tests.cpp
+        )
+
+set_target_properties(${PROJECT_NAME}
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}"
         )

@@ -2,3 +2,4 @@
 *cmake-build-debug/
 *.dSYM
 *a.out
+abstract_vm

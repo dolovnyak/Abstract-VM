@@ -58,3 +58,18 @@ const IOperand* OperandFactory::CreateDouble(const std::string& value)
 	double tmpValue = std::stod(value);
 	return new Operand<double>(OperandType::Double, tmpValue);
 }
+
+OperandException::OperandException(const std::string& strException)
+: _strException(strException)
+{
+}
+
+const char* OperandException::what() const throw()
+{
+	return _strException.c_str();
+}
+
+DivisionByZero::DivisionByZero(const IOperand& left, const IOperand& right)
+: OperandException("Division by zero " + to_string(left) + "/" + to_string(right))
+{
+}

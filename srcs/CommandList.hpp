@@ -9,7 +9,7 @@ class CommandList
 {
 public:
 	//TODO add coplien form
-	void AddCommand(std::string command);
+	void AddCommand(const std::string& command);
 	void Execute();
 	
 private:
@@ -37,7 +37,7 @@ private:
 	std::list<Command> _commandList;
 	
 	OperandType GetOperandType(const std::string& strOperandType);
-	std::string GetOperandValue(const std::string& operandValue);
+	std::string GetOperandValue(const std::string& operandValue, OperandType operandType);
 	void AddCommandWithoutValue(const std::string& strCommand);
 	void AddCommandWithValue(const std::vector<std::string>& commandWords);
 };

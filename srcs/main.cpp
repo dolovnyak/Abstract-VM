@@ -1,11 +1,8 @@
 #include <iostream>
-#include <cassert>
-
-#include "Operand.hpp"
-#include "AbstractVmStack.hpp"
+#include <fstream>
 #include "CommandList.hpp"
 
-void AddCommand(CommandList& commandList, std::list<std::string>& lexicalExceptionList, const std::string& command)
+void addCommand(CommandList& commandList, std::list<std::string>& lexicalExceptionList, const std::string& command)
 {
 	try
 	{
@@ -17,7 +14,7 @@ void AddCommand(CommandList& commandList, std::list<std::string>& lexicalExcepti
 	}
 }
 
-void RunCommands(CommandList& commandList, std::list<std::string>& lexicalExceptionsList)
+void runCommands(CommandList& commandList, std::list<std::string>& lexicalExceptionsList)
 {
 	if (lexicalExceptionsList.empty())
 	{
@@ -32,83 +29,70 @@ void RunCommands(CommandList& commandList, std::list<std::string>& lexicalExcept
 	}
 	else
 	{
+		std::cout << "The assembly program includes one or several lexical errors or syntactic errors" << std::endl;
 		for (const std::string& lexicalException : lexicalExceptionsList)
 			std::cout << lexicalException << std::endl;
 	}
 }
 
-void RunFromStandardOutput()
+void runFromStandardOutput()
 {
 	CommandList commandList;
 	std::list<std::string> lexicalExceptionList;
+	std::string command;
 	
 	while (true)
 	{
-		std::string command;
 		std::getline(std::cin, command);
 		
+		//TODO string with only spaces equal empty string
+		if (command.empty() || (command[0] == ';' && command != ";;"))
+			continue;
 		if (command == ";;")
-		{
-			RunCommands(commandList, lexicalExceptionList);
-			return;
-		}
+			break;
 		
-		AddCommand(commandList, lexicalExceptionList, command);
+		addCommand(commandList, lexicalExceptionList, command);
 	}
+	runCommands(commandList, lexicalExceptionList);
+}
+
+void runFromFile(char* filePath)
+{
+	std::ifstream inputFile;
+	inputFile.open(filePath);
+	
+	if (!inputFile.is_open())
+	{
+		std::cout << "input file name doesn't correct" << std::endl;
+		return;
+	}
+	
+	CommandList commandList;
+	std::list<std::string> lexicalExceptionList;
+	std::string command;
+	
+	while (std::getline(inputFile, command))
+	{
+		if (command.empty() || command[0] == ';')
+			continue;
+		addCommand(commandList, lexicalExceptionList, command);
+	}
+	
+	runCommands(commandList, lexicalExceptionList);
 }
 
 int main(int argc, char **argv)
 {
-	std::string str = "asdasdasd1";
-	
-	size_t n = str.find_last_of('1');
-	std::cout << (n == str.size() - 1) << std::endl;
-	return 0;
-	
 	if (argc == 1)
 	{
-		RunFromStandardOutput();
+		runFromStandardOutput();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	try
+	else if (argc == 2)
 	{
-		AbstractVmStack vmStack;
-		vmStack.Push(OperandType::Int8, "64");
-		vmStack.Print();
-		std::cout << std::endl;
-		
-		vmStack.Push(OperandType::Int16, "14525");
-		vmStack.Push(OperandType::Int32, "145215");
-		vmStack.Push(OperandType::Float, "14.5215");
-		vmStack.Push(OperandType::Double, "14252.5215");
-		vmStack.Dump();
-		std::cout << std::endl;
-		
-		vmStack.Assert(OperandType::Double, "14252.5215");
-		
-		vmStack.Add();
-		vmStack.Dump();
-		
-		std::cout << std::endl;
-		vmStack.Pop();
-		vmStack.Dump();
-		
+		runFromFile(argv[1]);
 	}
-	catch (const std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-	}
+	else
+		std::cout << "incorrect number of arguments" << std::endl;
+	
 	return 0;
 }

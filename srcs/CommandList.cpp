@@ -1,13 +1,13 @@
 #include "CommandList.hpp"
 
-void CommandList::AddCommand(std::string command)
+void CommandList::AddCommand(const std::string& command)
 {
 	std::vector<std::string> commandWords;
 	
 	split(command, commandWords, ' ');
 	
-	if (commandWords.size() > 2)
-		throw std::logic_error("The assembly program includes one or several lexical errors or syntactic errors");
+	if (commandWords.empty() || commandWords.size() > 2)
+		throw std::logic_error("not correct number of words in command");
 	
 	if (commandWords.size() == 1)
 	{
@@ -21,7 +21,50 @@ void CommandList::AddCommand(std::string command)
 
 void CommandList::Execute()
 {
-
+	if (_commandList.back().commandType != CommandType::Exit)
+		throw std::logic_error("The program doesn't have an exit instruction or there are instructions after exit");
+	
+	AbstractVmStack abstractVmStack;
+	
+	for (const Command& command: _commandList)
+	{
+		switch (command.commandType)
+		{
+			case CommandType::Push:
+				abstractVmStack.Push(command.operandType, command.value);
+				break;
+			case Pop:
+				abstractVmStack.Pop();
+				break;
+			case Dump:
+				abstractVmStack.Dump();
+				break;
+			case Assert:
+				abstractVmStack.Assert(command.operandType, command.value);
+				break;
+			case Add:
+				abstractVmStack.Add();
+				break;
+			case Sub:
+				abstractVmStack.Sub();
+				break;
+			case Mul:
+				abstractVmStack.Mul();
+				break;
+			case Div:
+				abstractVmStack.Div();
+				break;
+			case Modulo:
+				abstractVmStack.Mod();
+				break;
+			case Print:
+				abstractVmStack.Print();
+				break;
+			case Exit:
+				abstractVmStack.Exit();
+				break;
+		}
+	}
 }
 
 void CommandList::AddCommandWithoutValue(const std::string& strCommand)
@@ -48,6 +91,9 @@ void CommandList::AddCommandWithoutValue(const std::string& strCommand)
 		command.commandType = CommandType::Exit;
 	else
 		throw std::logic_error("command type is incorrect"); //TODO more fully error
+		
+	command.operandType = OperandType::Incorrect;
+	command.value = "";
 	
 	_commandList.push_back(command);
 }
@@ -66,8 +112,15 @@ void CommandList::AddCommandWithValue(const std::vector<std::string>& commandWor
 	std::vector<std::string> typeAndValue;
 	split(commandWords[1], typeAndValue, '(');
 	
+	if (typeAndValue.size() != 2 || typeAndValue[1].find_last_of(')') != typeAndValue[1].size() - 1)
+		throw std::logic_error("incorrect parentheses"); //TODO more fully error
+	
+	typeAndValue[1].erase(typeAndValue[1].size() - 1);
+	
 	command.operandType = GetOperandType(typeAndValue[0]);
-	command.value = GetOperandValue(typeAndValue[1]);
+	command.value = GetOperandValue(typeAndValue[1], command.operandType);
+	
+	_commandList.push_back(command);
 }
 
 OperandType CommandList::GetOperandType(const std::string& strOperandType)
@@ -86,9 +139,43 @@ OperandType CommandList::GetOperandType(const std::string& strOperandType)
 	throw std::logic_error("value type is incorrect"); //TODO more fully error
 }
 
-std::string CommandList::GetOperandValue(const std::string& operandValue)
+std::string CommandList::GetOperandValue(const std::string& operandValue, OperandType operandType)
 {
-	//TODO
-	return std::string();
+	bool containsDot = false;
+	int i = 0;
+	
+	if (operandValue[0] == '-' && operandValue.size() > 1)
+		i++;
+	else if (operandValue[0] == '-')
+		throw std::logic_error("value is incorrect"); //TODO more fully error
+	
+	for (; i < operandValue.size(); i++)
+	{
+		if (!isdigit(operandValue[i]))
+		{
+			if (operandValue[i] == '.' && isFractional(operandType))
+			{
+				if (containsDot)
+					throw std::logic_error("few dots in number");
+				containsDot = true;
+			}
+			else
+				throw std::logic_error("value is incorrect"); //TODO more fully error
+		}
+	}
+	
+	return operandValue;
 }
 
+//push int32(42)
+//push int32(33)
+//add
+//push float(44.55)
+//mul
+//push double(42.42)
+//push int32(42)
+//dump
+//pop
+//assert double(42.42)
+//exit
+//;;
