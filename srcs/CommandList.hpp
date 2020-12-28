@@ -9,7 +9,11 @@
 class CommandList
 {
 public:
-	//TODO add coplien form
+	CommandList();
+	CommandList(const CommandList& commandList);
+	CommandList& operator=(const CommandList& commandList);
+	~CommandList();
+	
 	void AddCommand(const std::string& command);
 	void Execute();
 	
@@ -27,10 +31,6 @@ private:
 		Modulo,
 		Print,
 		Exit,
-	};
-	enum Lexeme
-	{
-	
 	};
 	typedef struct	Command
 	{

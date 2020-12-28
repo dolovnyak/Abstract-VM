@@ -1,5 +1,34 @@
 #include "AbstractVmStack.hpp"
 
+AbstractVmStack::AbstractVmStack()
+{
+}
+
+AbstractVmStack::AbstractVmStack(const AbstractVmStack& abstractVmStack)
+{
+	*this = abstractVmStack;
+}
+
+AbstractVmStack& AbstractVmStack::operator=(const AbstractVmStack& abstractVmStack)
+{
+	if (this == &abstractVmStack)
+		return *this;
+	
+	for (const IOperand* op : abstractVmStack._stack)
+	{
+		const IOperand* newOp = OperandFactory::CreateOperand(op->GetType(), op->ToStringWithPrecision());
+		_stack.push_front(newOp);
+	}
+	
+	return *this;
+}
+
+AbstractVmStack::~AbstractVmStack()
+{
+	while (!_stack.empty())
+		this->Pop();
+}
+
 void AbstractVmStack::Push(OperandType opType, const std::string& value)
 {
 	const IOperand* newOp = OperandFactory::CreateOperand(opType, value);

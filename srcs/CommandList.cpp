@@ -1,5 +1,28 @@
 #include "CommandList.hpp"
 
+CommandList::CommandList()
+{
+}
+
+CommandList::CommandList(const CommandList& commandList)
+{
+	*this = commandList;
+}
+
+CommandList& CommandList::operator=(const CommandList& commandList)
+{
+	if (this == &commandList)
+		return *this;
+	
+	_commandList = commandList._commandList;
+	
+	return *this;
+}
+
+CommandList::~CommandList()
+{
+}
+
 void CommandList::AddCommand(const std::string& command)
 {
 	Lexer lexer;

@@ -6,7 +6,11 @@
 class AbstractVmStack
 {
 public:
-	//TODO coplien form
+	AbstractVmStack();
+	AbstractVmStack(const AbstractVmStack& abstractVmStack);
+	AbstractVmStack& operator=(const AbstractVmStack& abstractVmStack);
+	~AbstractVmStack();
+	
 	void Push(OperandType opType, const std::string& value);
 	void Pop();
 	void Dump();

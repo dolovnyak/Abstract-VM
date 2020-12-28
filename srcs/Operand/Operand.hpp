@@ -4,6 +4,9 @@
 #include "OperandFactory.hpp"
 #include "OperandExceptions.hpp"
 
+long double getFractionalValue(const IOperand& op);
+int64_t getIntegerValue(const IOperand& op);
+
 template<typename T>
 class Operand : public IOperand
 {
@@ -37,8 +40,6 @@ private:
 	OperandType _type;
 	
 	Operand<T>() {}
-	static long double GetFractionalValue(const IOperand& op);
-	static int64_t GetIntegerValue(const IOperand& op);
 };
 
 template<typename T>
@@ -69,7 +70,7 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 	
 	if (!isFractional(maxType))
 	{
-		int64_t secondOpValue = static_cast<int64_t>(GetIntegerValue(rightOperand));
+		int64_t secondOpValue = static_cast<int64_t>(getIntegerValue(rightOperand));
 		
 		switch (operatorType)
 		{
@@ -98,8 +99,8 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 	else
 	{
 		long double secondOpValue = isFractional(rightOperand.GetType()) ?
-									static_cast<long double>(GetFractionalValue(rightOperand)) :
-									static_cast<long double>(GetIntegerValue(rightOperand));
+									static_cast<long double>(getFractionalValue(rightOperand)) :
+									static_cast<long double>(getIntegerValue(rightOperand));
 		
 		switch (operatorType)
 		{
@@ -124,8 +125,7 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 	}
 }
 
-template<typename T>
-int64_t Operand<T>::GetIntegerValue(const IOperand& op)
+int64_t getIntegerValue(const IOperand& op)
 {
 	if (op.GetType() == OperandType::Int8)
 		return static_cast<int64_t>(dynamic_cast<const Operand<int8_t>*>(&op)->GetValue());
@@ -135,8 +135,7 @@ int64_t Operand<T>::GetIntegerValue(const IOperand& op)
 	return static_cast<int64_t>(dynamic_cast<const Operand<int32_t>*>(&op)->GetValue());
 }
 
-template<typename T>
-long double Operand<T>::GetFractionalValue(const IOperand& op)
+long double getFractionalValue(const IOperand& op)
 {
 	if (op.GetType() == OperandType::Float)
 		return static_cast<long double>(dynamic_cast<const Operand<float>*>(&op)->GetValue());
@@ -152,6 +151,7 @@ Operand<T>& Operand<T>::operator=(const Operand<T>& op)
 	
 	_value = op._value;
 	_strValue = op._strValue;
+	_strValueWithFullPrecision = op._strValueWithFullPrecision;
 	_type = op._type;
 	
 	return *this;
