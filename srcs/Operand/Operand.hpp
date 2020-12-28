@@ -2,6 +2,7 @@
 
 #include "IOperand.hpp"
 #include "OperandFactory.hpp"
+#include "OperandExceptions.hpp"
 
 template<typename T>
 class Operand : public IOperand
@@ -64,63 +65,62 @@ Operand<T>::Operand(const Operand<T>& op)
 template<typename T>
 const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& rightOperand) const
 {
+	OperandType maxType = this->GetPrecision() > rightOperand.GetPrecision() ? this->GetType() : rightOperand.GetType();
+	
+	if (!isFractional(maxType))
 	{
-		OperandType maxType = this->GetPrecision() > rightOperand.GetPrecision() ? this->GetType() : rightOperand.GetType();
+		int64_t secondOpValue = static_cast<int64_t>(GetIntegerValue(rightOperand));
 		
-		if (!isFractional(maxType))
+		switch (operatorType)
 		{
-			int64_t secondOpValue = static_cast<int64_t>(GetIntegerValue(rightOperand));
+			case Operator::Addition:
+				return OperandFactory::CreateOperand(maxType, std::to_string(static_cast<int64_t>(_value) + secondOpValue));
 			
-			switch (operatorType)
-			{
-				case Operator::Addition:
-					return OperandFactory::CreateOperand
-					(maxType, std::to_string(static_cast<int64_t>(_value) + secondOpValue));
-				case Operator::Subtraction:
-					return OperandFactory::CreateOperand
-					(maxType, std::to_string(static_cast<int64_t>(_value) - secondOpValue));
-				case Operator::Multiplication:
-					return OperandFactory::CreateOperand
-					(maxType, std::to_string(static_cast<int64_t>(_value) * secondOpValue));
-				case Operator::Division:
-					if (secondOpValue == 0)
-						throw DivisionByZero(*this, rightOperand);
-					return OperandFactory::CreateOperand
-					(maxType, std::to_string(static_cast<int64_t>(_value) / secondOpValue));
-				case Operator::Mod:
-					if (secondOpValue == 0)
-						throw std::logic_error("mod by 0");
-					return OperandFactory::CreateOperand
-					(maxType, std::to_string(static_cast<int64_t>(_value) % secondOpValue));
-			}
+			case Operator::Subtraction:
+				return OperandFactory::CreateOperand(maxType, std::to_string(static_cast<int64_t>(_value) - secondOpValue));
+			
+			case Operator::Multiplication:
+				return OperandFactory::CreateOperand(maxType, std::to_string(static_cast<int64_t>(_value) * secondOpValue));
+			
+			case Operator::Division:
+				if (secondOpValue == 0)
+					throw DivisionByZero(*this, rightOperand);
+				
+				return OperandFactory::CreateOperand(maxType, std::to_string(static_cast<int64_t>(_value) / secondOpValue));
+			
+			case Operator::Mod:
+				if (secondOpValue == 0)
+					throw ModuloByZero(*this, rightOperand);
+				
+				return OperandFactory::CreateOperand(maxType, std::to_string(static_cast<int64_t>(_value) % secondOpValue));
 		}
-		else
+	}
+	else
+	{
+		long double secondOpValue = isFractional(rightOperand.GetType()) ?
+									static_cast<long double>(GetFractionalValue(rightOperand)) :
+									static_cast<long double>(GetIntegerValue(rightOperand));
+		
+		switch (operatorType)
 		{
-			long double secondOpValue = isFractional(rightOperand.GetType()) ?
-					static_cast<long double>(GetFractionalValue(rightOperand)) :
-					static_cast<long double>(GetIntegerValue(rightOperand));
-					
-			switch (operatorType)
-			{
-				case Operator::Addition:
-					return OperandFactory::CreateOperand
-					(maxType, to_string_precision(static_cast<long double>(_value) + secondOpValue));
-				case Operator::Subtraction:
-					return OperandFactory::CreateOperand
-					(maxType, to_string_precision(static_cast<long double>(_value) - secondOpValue));
-				case Operator::Multiplication:
-					return OperandFactory::CreateOperand
-					(maxType, to_string_precision(static_cast<long double>(_value) * secondOpValue));
-				case Operator::Division:
-					if (secondOpValue == 0)
-						throw std::logic_error("division by 0");
-					return OperandFactory::CreateOperand
-					(maxType, to_string_precision(static_cast<long double>(_value) / secondOpValue));
-				case Operator::Mod:
-					throw std::logic_error("mod doesn't correct with fractional values");
-			}
+			case Operator::Addition:
+				return OperandFactory::CreateOperand(maxType, to_string_precision(static_cast<long double>(_value) + secondOpValue));
+			
+			case Operator::Subtraction:
+				return OperandFactory::CreateOperand(maxType, to_string_precision(static_cast<long double>(_value) - secondOpValue));
+			
+			case Operator::Multiplication:
+				return OperandFactory::CreateOperand(maxType, to_string_precision(static_cast<long double>(_value) * secondOpValue));
+			
+			case Operator::Division:
+				if (secondOpValue == 0)
+					throw DivisionByZero(*this, rightOperand);
+				
+				return OperandFactory::CreateOperand(maxType, to_string_precision(static_cast<long double>(_value) / secondOpValue));
+			
+			case Operator::Mod:
+				throw ModuloWithFractionalValues(*this, rightOperand);
 		}
-		throw std::logic_error("operator type doesn't correct");
 	}
 }
 
@@ -204,4 +204,3 @@ const IOperand* Operand<T>::operator%(const IOperand& rightOperand) const
 {
 	return Calculation(Operator::Mod, rightOperand);
 }
-

@@ -29,9 +29,12 @@ void runCommands(CommandList& commandList, std::list<std::string>& lexicalExcept
 	}
 	else
 	{
-		std::cout << "The assembly program includes one or several lexical errors or syntactic errors" << std::endl;
+		std::cout << std::endl <<
+		"The assembly program includes one or several lexical errors or syntactic errors:" <<
+		std::endl << std::endl;
+		
 		for (const std::string& lexicalException : lexicalExceptionsList)
-			std::cout << lexicalException << std::endl;
+			std::cout << std::string(5, ' ') << lexicalException << std::endl;
 	}
 }
 

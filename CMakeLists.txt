@@ -3,11 +3,18 @@ project(abstract_vm)
 
 set(CMAKE_CXX_STANDARD 11)
 
-include_directories(srcs)
+include_directories(
+        srcs
+        srcs/Parse
+        srcs/Operand
+)
 
 set(PROJECT_SOURCES
         srcs/AbstractVmStack.cpp
-        srcs/OperandFactory.cpp
+        srcs/Operand/OperandFactory.cpp
+        srcs/Operand/OperandExceptions.cpp
+        srcs/Parse/Lexer.cpp
+        srcs/Parse/Parser.cpp
         srcs/utilities.cpp
         srcs/CommandList.cpp
         )

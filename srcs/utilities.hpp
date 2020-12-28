@@ -62,3 +62,5 @@ std::string to_string(Operator op);
 std::string to_string(OperandType type);
 std::string to_string(OperandType type, const std::string& value);
 std::string to_string(const IOperand& op);
+int8_t	stoi8(const std::string& value);
+int16_t	stoi16(const std::string& value);

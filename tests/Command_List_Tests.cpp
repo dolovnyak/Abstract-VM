@@ -93,7 +93,7 @@ void One_Word_Commands_Tests()
 		int i = 0;
 		for (CommandList::Command command : commandList._commandList)
 		{
-			assert(command.operandType == OperandType::Incorrect);
+			assert(command.valueType == OperandType::Incorrect);
 			assert(command.value.empty());
 			switch (i)
 			{
@@ -190,86 +190,86 @@ void Two_Word_Commands_Tests()
 			{
 				case 0:
 					assert(command.value == "52");
-					assert(command.operandType == OperandType::Int8);
+					assert(command.valueType == OperandType::Int8);
 					break;
 				case 1:
 					assert(command.value == "52");
-					assert(command.operandType == OperandType::Int16);
+					assert(command.valueType == OperandType::Int16);
 					break;
 				case 2:
 					assert(command.value == "-52");
-					assert(command.operandType == OperandType::Int32);
+					assert(command.valueType == OperandType::Int32);
 					break;
 				case 3:
 					assert(command.value == "-52");
-					assert(command.operandType == OperandType::Float);
+					assert(command.valueType == OperandType::Float);
 					break;
 				case 4:
 					assert(command.value == "52");
-					assert(command.operandType == OperandType::Double);
+					assert(command.valueType == OperandType::Double);
 					break;
 					
 				case 5:
 					assert(command.value == "252");
-					assert(command.operandType == OperandType::Int8);
+					assert(command.valueType == OperandType::Int8);
 					break;
 				case 6:
 					assert(command.value == "212552");
-					assert(command.operandType == OperandType::Int16);
+					assert(command.valueType == OperandType::Int16);
 					break;
 				case 7:
 					assert(command.value == "55311252");
-					assert(command.operandType == OperandType::Int32);
+					assert(command.valueType == OperandType::Int32);
 					break;
 				case 8:
 					assert(command.value == "52.126541");
-					assert(command.operandType == OperandType::Float);
+					assert(command.valueType == OperandType::Float);
 					break;
 				case 9:
 					assert(command.value == "52.5436545");
-					assert(command.operandType == OperandType::Double);
+					assert(command.valueType == OperandType::Double);
 					break;
 					
 				case 10:
 					assert(command.value == "52");
-					assert(command.operandType == OperandType::Int8);
+					assert(command.valueType == OperandType::Int8);
 					break;
 				case 11:
 					assert(command.value == "52");
-					assert(command.operandType == OperandType::Int16);
+					assert(command.valueType == OperandType::Int16);
 					break;
 				case 12:
 					assert(command.value == "52");
-					assert(command.operandType == OperandType::Int32);
+					assert(command.valueType == OperandType::Int32);
 					break;
 				case 13:
 					assert(command.value == "52");
-					assert(command.operandType == OperandType::Float);
+					assert(command.valueType == OperandType::Float);
 					break;
 				case 14:
 					assert(command.value == "52");
-					assert(command.operandType == OperandType::Double);
+					assert(command.valueType == OperandType::Double);
 					break;
 				
 				case 15:
 					assert(command.value == "252");
-					assert(command.operandType == OperandType::Int8);
+					assert(command.valueType == OperandType::Int8);
 					break;
 				case 16:
 					assert(command.value == "212552");
-					assert(command.operandType == OperandType::Int16);
+					assert(command.valueType == OperandType::Int16);
 					break;
 				case 17:
 					assert(command.value == "55311252");
-					assert(command.operandType == OperandType::Int32);
+					assert(command.valueType == OperandType::Int32);
 					break;
 				case 18:
 					assert(command.value == "52.126541");
-					assert(command.operandType == OperandType::Float);
+					assert(command.valueType == OperandType::Float);
 					break;
 				case 19:
 					assert(command.value == "52.5436545");
-					assert(command.operandType == OperandType::Double);
+					assert(command.valueType == OperandType::Double);
 					break;
 				default:
 					assert(false);

@@ -1,5 +1,4 @@
 #include "Tests.hpp"
-#include "OperandFactory.hpp"
 #include "AbstractVmStack.hpp"
 
 void Push_Pop_Assert_Print_Tests()

@@ -50,3 +50,23 @@ std::string to_string(const IOperand& op)
 {
 	return "(type - " + to_string(op.GetType()) + " value - " + op.ToString() + ")";
 }
+
+int8_t stoi8(const std::string& value)
+{
+	int tmpValue = std::stoi(value);
+	
+	if (tmpValue < -128 || tmpValue > 127)
+		throw std::out_of_range("");
+	
+	return static_cast<int8_t>(tmpValue);
+}
+
+int16_t	stoi16(const std::string& value)
+{
+	int tmpValue = std::stoi(value);
+	
+	if (tmpValue < -32768 || tmpValue > 32767)
+		throw std::out_of_range("");
+	
+	return static_cast<int16_t>(tmpValue);
+}

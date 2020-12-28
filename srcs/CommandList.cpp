@@ -2,27 +2,26 @@
 
 void CommandList::AddCommand(const std::string& command)
 {
-	std::vector<std::string> commandWords;
+	Lexer lexer;
+	lexer.ParseIntoLexemes(command);
 	
-	split(command, commandWords, ' ');
+	Parser parser(lexer.GetLexemes(), command);
+	parser.ParseLexemes();
 	
-	if (commandWords.empty() || commandWords.size() > 2)
-		throw std::logic_error("not correct number of words in command");
-	
-	if (commandWords.size() == 1)
+	if (parser.GetInstructionType() == InstructionType::CommandWithoutValue)
 	{
-		AddCommandWithoutValue(commandWords.back());
+		AddCommandWithoutValue(parser.GetCommandType(), command);
 	}
 	else
 	{
-		AddCommandWithValue(commandWords);
+		AddCommandWithValue(parser.GetCommandType(), parser.GetValueType(), parser.GetValue(), command);
 	}
 }
 
 void CommandList::Execute()
 {
-	if (_commandList.back().commandType != CommandType::Exit)
-		throw std::logic_error("The program doesn't have an exit instruction or there are instructions after exit");
+	if (_commandList.empty() || _commandList.back().commandType != CommandType::Exit)
+		throw NotCorrectExit();
 	
 	AbstractVmStack abstractVmStack;
 	
@@ -31,7 +30,7 @@ void CommandList::Execute()
 		switch (command.commandType)
 		{
 			case CommandType::Push:
-				abstractVmStack.Push(command.operandType, command.value);
+				abstractVmStack.Push(command.valueType, command.value);
 				break;
 			case Pop:
 				abstractVmStack.Pop();
@@ -40,7 +39,7 @@ void CommandList::Execute()
 				abstractVmStack.Dump();
 				break;
 			case Assert:
-				abstractVmStack.Assert(command.operandType, command.value);
+				abstractVmStack.Assert(command.valueType, command.value);
 				break;
 			case Add:
 				abstractVmStack.Add();
@@ -67,115 +66,141 @@ void CommandList::Execute()
 	}
 }
 
-void CommandList::AddCommandWithoutValue(const std::string& strCommand)
+void CommandList::AddCommandWithoutValue(const std::string& commandType, const std::string& rawCommand)
 {
 	Command command;
 	
-	if (strCommand == "pop")
+	if (commandType == "pop")
 		command.commandType = CommandType::Pop;
-	else if (strCommand == "dump")
+	else if (commandType == "dump")
 		command.commandType = CommandType::Dump;
-	else if (strCommand == "add")
+	else if (commandType == "add")
 		command.commandType = CommandType::Add;
-	else if (strCommand == "sub")
+	else if (commandType == "sub")
 		command.commandType = CommandType::Sub;
-	else if (strCommand == "mul")
+	else if (commandType == "mul")
 		command.commandType = CommandType::Mul;
-	else if (strCommand == "div")
+	else if (commandType == "div")
 		command.commandType = CommandType::Div;
-	else if (strCommand == "mod")
+	else if (commandType == "mod")
 		command.commandType = CommandType::Modulo;
-	else if (strCommand == "print")
+	else if (commandType == "print")
 		command.commandType = CommandType::Print;
-	else if (strCommand == "exit")
+	else if (commandType == "exit")
 		command.commandType = CommandType::Exit;
 	else
-		throw std::logic_error("command type is incorrect"); //TODO more fully error
+		throw IncorrectCommandType(commandType, rawCommand);
 		
-	command.operandType = OperandType::Incorrect;
+	command.valueType = OperandType::Incorrect;
 	command.value = "";
 	
 	_commandList.push_back(command);
 }
 
-void CommandList::AddCommandWithValue(const std::vector<std::string>& commandWords)
+void CommandList::AddCommandWithValue(const std::string& commandType, const std::string& valueType,
+						 const std::string& value, const std::string& rawCommand)
 {
 	Command command;
 	
-	if (commandWords[0] == "push")
+	if (commandType == "push")
 		command.commandType = CommandType::Push;
-	else if (commandWords[0] == "assert")
+	else if (commandType == "assert")
 		command.commandType = CommandType::Assert;
 	else
-		throw std::logic_error("command type is incorrect"); //TODO more fully error
+		throw IncorrectCommandType(commandType, rawCommand);
 	
-	std::vector<std::string> typeAndValue;
-	split(commandWords[1], typeAndValue, '(');
-	
-	if (typeAndValue.size() != 2 || typeAndValue[1].find_last_of(')') != typeAndValue[1].size() - 1)
-		throw std::logic_error("incorrect parentheses"); //TODO more fully error
-	
-	typeAndValue[1].erase(typeAndValue[1].size() - 1);
-	
-	command.operandType = GetOperandType(typeAndValue[0]);
-	command.value = GetOperandValue(typeAndValue[1], command.operandType);
+	command.valueType = GetValueType(valueType, rawCommand);
+	command.value = GetValue(value, command.valueType, rawCommand);
 	
 	_commandList.push_back(command);
 }
 
-OperandType CommandList::GetOperandType(const std::string& strOperandType)
+OperandType CommandList::GetValueType(const std::string& strValueType, const std::string& rawCommand)
 {
-	if (strOperandType == "int8")
+	if (strValueType == "int8")
 		return OperandType::Int8;
-	else if (strOperandType == "int16")
+	else if (strValueType == "int16")
 		return OperandType::Int16;
-	else if (strOperandType == "int32")
+	else if (strValueType == "int32")
 		return OperandType::Int32;
-	else if (strOperandType == "float")
+	else if (strValueType == "float")
 		return OperandType::Float;
-	else if (strOperandType == "double")
+	else if (strValueType == "double")
 		return OperandType::Double;
 	
-	throw std::logic_error("value type is incorrect"); //TODO more fully error
+	throw IncorrectValueType(strValueType, rawCommand);
 }
 
-std::string CommandList::GetOperandValue(const std::string& operandValue, OperandType operandType)
+std::string CommandList::GetValue(const std::string& value, OperandType type, const std::string& rawCommand)
 {
 	bool containsDot = false;
 	int i = 0;
 	
-	if (operandValue[0] == '-' && operandValue.size() > 1)
-		i++;
-	else if (operandValue[0] == '-')
-		throw std::logic_error("value is incorrect"); //TODO more fully error
+	if (value == "-." || value == ".")
+		throw IncorrectValue(value, rawCommand);
 	
-	for (; i < operandValue.size(); i++)
+	if (value[0] == '-' && value.size() > 1)
+		i++;
+	else if (value[0] == '-')
+		throw IncorrectValue(value, rawCommand);
+	
+	for (; i < value.size(); i++)
 	{
-		if (!isdigit(operandValue[i]))
+		if (!isdigit(value[i]))
 		{
-			if (operandValue[i] == '.' && isFractional(operandType))
+			if (value[i] == '.' && isFractional(type))
 			{
 				if (containsDot)
-					throw std::logic_error("few dots in number");
+					throw FewDotInNumber(value, rawCommand);
 				containsDot = true;
 			}
+			else if (value[i] == '.')
+				throw DotWithIntegerValue(value, rawCommand);
 			else
-				throw std::logic_error("value is incorrect"); //TODO more fully error
+				throw IncorrectValue(value, rawCommand);
 		}
 	}
 	
-	return operandValue;
+	return value;
 }
 
-//push int32(42)
-//push int32(33)
-//add
-//push float(44.55)
-//mul
-//push double(42.42)
-//push int32(42)
-//dump
-//pop
-//assert double(42.42)
-//exit
-//;;
+CommandList::SyntacticException::SyntacticException(const std::string& strException)
+: _strException("Syntactic exception: " + strException)
+{
+}
+
+const char* CommandList::SyntacticException::what() const throw()
+{
+	return _strException.c_str();
+}
+
+CommandList::IncorrectCommandType::IncorrectCommandType(const std::string& commandType, const std::string& command)
+: SyntacticException("command \"" + command + "\", command type '" + commandType + "' is incorrect")
+{
+}
+
+CommandList::IncorrectValueType::IncorrectValueType(const std::string& valueType, const std::string& command)
+: SyntacticException("command \"" + command + "\", value type '" + valueType + "' is incorrect")
+{
+}
+
+CommandList::IncorrectValue::IncorrectValue(const std::string& value, const std::string& command)
+: SyntacticException("command \"" + command + "\", value '" + value + "' is incorrect")
+{
+
+}
+
+CommandList::DotWithIntegerValue::DotWithIntegerValue(const std::string& value, const std::string& command)
+: SyntacticException("command \"" + command + "\", value '" + value + "' dot with integer value")
+{
+}
+
+CommandList::FewDotInNumber::FewDotInNumber(const std::string& value, const std::string& command)
+: SyntacticException("command \"" + command + "\", value '" + value + "' few dots in number")
+{
+}
+
+CommandList::NotCorrectExit::NotCorrectExit()
+: SyntacticException("program doesn't have an exit instruction or there are instructions after exit")
+{
+}
