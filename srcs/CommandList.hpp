@@ -5,7 +5,6 @@
 #include <list>
 #include <vector>
 
-
 class CommandList
 {
 public:

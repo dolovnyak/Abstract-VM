@@ -157,7 +157,7 @@ OperandType CommandList::GetValueType(const std::string& strValueType, const std
 std::string CommandList::GetValue(const std::string& value, OperandType type, const std::string& rawCommand)
 {
 	bool containsDot = false;
-	int i = 0;
+	size_t i = 0;
 	
 	if (value == "-." || value == ".")
 		throw IncorrectValue(value, rawCommand);

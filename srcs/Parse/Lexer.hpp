@@ -19,7 +19,11 @@ typedef struct Lexeme
 class Lexer
 {
 public:
-	//TODO coplien form
+	Lexer();
+	Lexer(const Lexer& lexer);
+	Lexer& operator=(const Lexer& lexer);
+	~Lexer();
+	
 	void ParseIntoLexemes(const std::string& command);
 	std::vector<Lexeme> GetLexemes() const;
 

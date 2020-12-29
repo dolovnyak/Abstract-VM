@@ -48,7 +48,6 @@ void runFromStandardOutput()
 	{
 		std::getline(std::cin, command);
 		
-		//TODO string with only spaces equal empty string
 		if (command.empty() || (command[0] == ';' && command != ";;"))
 			continue;
 		if (command == ";;")

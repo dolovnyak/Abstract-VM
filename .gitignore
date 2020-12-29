@@ -3,3 +3,5 @@
 *.dSYM
 *a.out
 abstract_vm
+avm
+objs

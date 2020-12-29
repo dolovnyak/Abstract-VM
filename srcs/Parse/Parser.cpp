@@ -29,6 +29,33 @@ Parser::Parser(const std::vector<Lexeme>& lexemes, const std::string& rawCommand
 {
 }
 
+Parser::Parser()
+{
+}
+
+Parser::Parser(const Parser &parser)
+{
+	*this = parser;
+}
+
+Parser &Parser::operator=(const Parser &parser)
+{
+	if (this == &parser)
+		return *this;
+	
+	_instructionType = parser._instructionType;
+	_commandType = parser._commandType;
+	_valueType = parser._valueType;
+	_value = parser._value;
+	
+	return *this;
+}
+
+Parser::~Parser()
+{
+
+}
+
 void Parser::ParseLexemes()
 {
 	if (_lexemes.size() == 1 && _lexemes.front().token == Token::Word)
@@ -71,6 +98,8 @@ std::string Parser::GetValue() const
 {
 	return _value;
 }
+
+
 
 Parser::LexicalException::LexicalException(const std::vector<Lexeme>& lexemes, const std::string rawCommand)
 : _strException("Lexical exception: command \"" + rawCommand +

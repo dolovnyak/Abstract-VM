@@ -13,7 +13,11 @@ enum InstructionType
 class Parser
 {
 public:
+	Parser();
 	Parser(const std::vector<Lexeme>& lexemes, const std::string& rawCommand);
+	Parser(const Parser& parser);
+	Parser& operator=(const Parser& parser);
+	~Parser();
 	
 	void ParseLexemes();
 	

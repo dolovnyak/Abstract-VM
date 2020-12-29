@@ -34,10 +34,10 @@ public:
 	const std::string& ToStringWithPrecision(void) const override { return _strValueWithFullPrecision; }
 	
 private:
+	OperandType _type;
 	T _value;
 	std::string _strValue;
 	std::string _strValueWithFullPrecision;
-	OperandType _type;
 	
 	Operand<T>() {}
 };

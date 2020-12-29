@@ -19,6 +19,29 @@ static std::string parseWord(int i, const std::string& command)
 	return command.substr(startWord, i - startWord);
 }
 
+Lexer::Lexer()
+{
+}
+
+Lexer::Lexer(const Lexer &lexer)
+{
+	*this = lexer;
+}
+
+Lexer &Lexer::operator=(const Lexer &lexer)
+{
+	if (this == &lexer)
+		return *this;
+	
+	_lexemes = lexer._lexemes;
+	
+	return *this;
+}
+
+Lexer::~Lexer()
+{
+}
+
 void Lexer::ParseIntoLexemes(const std::string& command)
 {
 	int i = 0;
