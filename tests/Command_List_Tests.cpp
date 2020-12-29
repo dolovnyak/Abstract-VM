@@ -13,7 +13,7 @@ void Not_Correct_Number_Of_Words_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "not correct number of words in command"));
+		assert(contains(exception.what(), "Lexical exception"));
 	}
 	
 	try
@@ -22,7 +22,7 @@ void Not_Correct_Number_Of_Words_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "not correct number of words in command"));
+		assert(contains(exception.what(), "Lexical exception"));
 	}
 	
 	try
@@ -31,7 +31,7 @@ void Not_Correct_Number_Of_Words_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "not correct number of words in command"));
+		assert(contains(exception.what(), "Lexical exception"));
 	}
 	
 	try
@@ -40,7 +40,7 @@ void Not_Correct_Number_Of_Words_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "command type is incorrect"));
+		assert(contains(exception.what(), "Lexical exception"));
 	}
 	
 	try
@@ -49,7 +49,7 @@ void Not_Correct_Number_Of_Words_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "command type is incorrect"));
+		assert(contains(exception.what(), "Lexical exception"));
 	}
 }
 
@@ -64,7 +64,9 @@ void One_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "command type is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "command type"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -74,7 +76,9 @@ void One_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "command type is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "command type"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -149,7 +153,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "command type is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "command type"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -288,6 +294,8 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value"));
 		assert(contains(exception.what(), "few dots in number"));
 	}
 	
@@ -297,7 +305,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "value is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -306,7 +316,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "value type is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value type"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -315,7 +327,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "value is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value"));
+		assert(contains(exception.what(), "dot with integer value"));
 	}
 	
 	try
@@ -324,7 +338,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "value is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -345,7 +361,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "value is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -355,7 +373,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "value is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -365,7 +385,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "value is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 	
 	try
@@ -375,7 +397,9 @@ void Two_Word_Commands_Tests()
 	}
 	catch (const std::exception& exception)
 	{
-		assert(contains(exception.what(), "value is incorrect"));
+		assert(contains(exception.what(), "Syntactic exception"));
+		assert(contains(exception.what(), "value"));
+		assert(contains(exception.what(), "is incorrect"));
 	}
 }
 

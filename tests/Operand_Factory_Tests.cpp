@@ -1,5 +1,4 @@
 #include "Tests.hpp"
-#include "OperandFactory.hpp"
 #include "Operand.hpp"
 
 void Int8_Tests()
@@ -16,7 +15,7 @@ void Int8_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand overflow"));
 	}
 	
 	try
@@ -30,7 +29,7 @@ void Int8_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand underflow"));
 	}
 }
 
@@ -48,7 +47,7 @@ void Int16_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand overflow"));
 	}
 	
 	try
@@ -63,7 +62,7 @@ void Int16_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand underflow"));
 	}
 }
 
@@ -81,7 +80,7 @@ void Int32_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand overflow"));
 	}
 	
 	try
@@ -96,7 +95,7 @@ void Int32_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand underflow"));
 	}
 }
 
@@ -114,7 +113,7 @@ void Float_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand overflow"));
 	}
 }
 
@@ -132,7 +131,7 @@ void Double_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand overflow"));
 	}
 }
 

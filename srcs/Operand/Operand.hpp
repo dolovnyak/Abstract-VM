@@ -4,9 +4,6 @@
 #include "OperandFactory.hpp"
 #include "OperandExceptions.hpp"
 
-long double getFractionalValue(const IOperand& op);
-int64_t getIntegerValue(const IOperand& op);
-
 template<typename T>
 class Operand : public IOperand
 {
@@ -38,6 +35,9 @@ private:
 	T _value;
 	std::string _strValue;
 	std::string _strValueWithFullPrecision;
+	
+	static long double getFractionalValue(const IOperand& op);
+	static int64_t getIntegerValue(const IOperand& op);
 	
 	Operand<T>() {}
 };
@@ -125,24 +125,6 @@ const IOperand* Operand<T>::Calculation(Operator operatorType, const IOperand& r
 	}
 }
 
-int64_t getIntegerValue(const IOperand& op)
-{
-	if (op.GetType() == OperandType::Int8)
-		return static_cast<int64_t>(dynamic_cast<const Operand<int8_t>*>(&op)->GetValue());
-	else if (op.GetType() == OperandType::Int16)
-		return static_cast<int64_t>(dynamic_cast<const Operand<int16_t>*>(&op)->GetValue());
-	
-	return static_cast<int64_t>(dynamic_cast<const Operand<int32_t>*>(&op)->GetValue());
-}
-
-long double getFractionalValue(const IOperand& op)
-{
-	if (op.GetType() == OperandType::Float)
-		return static_cast<long double>(dynamic_cast<const Operand<float>*>(&op)->GetValue());
-	
-	return static_cast<long double>(dynamic_cast<const Operand<double>*>(&op)->GetValue());
-}
-
 template<typename T>
 Operand<T>& Operand<T>::operator=(const Operand<T>& op)
 {
@@ -203,4 +185,24 @@ template<typename T>
 const IOperand* Operand<T>::operator%(const IOperand& rightOperand) const
 {
 	return Calculation(Operator::Mod, rightOperand);
+}
+
+template<typename T>
+long double Operand<T>::getFractionalValue(const IOperand &op)
+{
+	if (op.GetType() == OperandType::Float)
+		return static_cast<long double>(dynamic_cast<const Operand<float>*>(&op)->GetValue());
+	
+	return static_cast<long double>(dynamic_cast<const Operand<double>*>(&op)->GetValue());
+}
+
+template<typename T>
+int64_t Operand<T>::getIntegerValue(const IOperand &op)
+{
+	if (op.GetType() == OperandType::Int8)
+		return static_cast<int64_t>(dynamic_cast<const Operand<int8_t>*>(&op)->GetValue());
+	else if (op.GetType() == OperandType::Int16)
+		return static_cast<int64_t>(dynamic_cast<const Operand<int16_t>*>(&op)->GetValue());
+	
+	return static_cast<int64_t>(dynamic_cast<const Operand<int32_t>*>(&op)->GetValue());
 }

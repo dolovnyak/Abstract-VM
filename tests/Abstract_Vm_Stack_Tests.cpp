@@ -39,7 +39,7 @@ void Push_Pop_Assert_Print_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "assert instruction when stack is empty"));
+		assert(contains(e.what(), "try assert when stack is empty "));
 	}
 	
 	try
@@ -50,7 +50,7 @@ void Push_Pop_Assert_Print_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "assert instruction is not true"));
+		assert(contains(e.what(), "assert failure"));
 	}
 	
 	try
@@ -61,7 +61,7 @@ void Push_Pop_Assert_Print_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "assert instruction is not true"));
+		assert(contains(e.what(), "assert failure"));
 	}
 	
 	try
@@ -72,7 +72,7 @@ void Push_Pop_Assert_Print_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "assert instruction is not true"));
+		assert(contains(e.what(), "assert failure"));
 	}
 	
 	try
@@ -83,7 +83,7 @@ void Push_Pop_Assert_Print_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "try to print non 8-bit integer"));
+		assert(contains(e.what(), "try print incorrect value"));
 	}
 }
 
@@ -117,7 +117,7 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "stack is composed of strictly less that two values when an arithmetic instruction is executed"));
+		assert(contains(e.what(), "stack has lower than two values"));
 		vmStack.Pop();
 	}
 	
@@ -141,7 +141,7 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "stack is composed of strictly less that two values when an arithmetic instruction is executed"));
+		assert(contains(e.what(), "stack has lower than two values"));
 		vmStack.Pop();
 	}
 	
@@ -165,7 +165,7 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "stack is composed of strictly less that two values when an arithmetic instruction is executed"));
+		assert(contains(e.what(), "stack has lower than two values"));
 		vmStack.Pop();
 	}
 	
@@ -189,7 +189,7 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "stack is composed of strictly less that two values when an arithmetic instruction is executed"));
+		assert(contains(e.what(), "stack has lower than two values"));
 		vmStack.Pop();
 	}
 	
@@ -205,7 +205,7 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "mod doesn't correct with fractional values"));
+		assert(contains(e.what(), "modulo with fractional values"));
 		vmStack.Pop();
 	}
 	try
@@ -215,7 +215,7 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "mod doesn't correct with fractional values"));
+		assert(contains(e.what(), "modulo with fractional values"));
 		vmStack.Pop();
 	}
 	try
@@ -229,7 +229,7 @@ void Add_Sub_Mul_Div_Mod_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "stack is composed of strictly less that two values when an arithmetic instruction is executed"));
+		assert(contains(e.what(), "stack has lower than two values"));
 		vmStack.Pop();
 	}
 	

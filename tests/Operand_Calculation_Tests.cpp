@@ -28,7 +28,7 @@ void Addition_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand underflow"));
 	}
 	
 	firstValue = "124";
@@ -81,7 +81,7 @@ void Subtraction_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand overflow"));
 	}
 	
 	firstValue = "124";
@@ -133,7 +133,7 @@ void Multiplication_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand overflow"));
 	}
 	
 	firstValue = "124";
@@ -185,7 +185,7 @@ void Division_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "division by 0"));
+		assert(contains(e.what(), "division by zero"));
 	}
 	
 	try
@@ -200,7 +200,7 @@ void Division_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "division by 0"));
+		assert(contains(e.what(), "division by zero"));
 	}
 	
 	try
@@ -216,7 +216,7 @@ void Division_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "out of range"));
+		assert(contains(e.what(), "operand overflow"));
 	}
 	
 	
@@ -263,7 +263,7 @@ void Modulo_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "doesn't correct with fractional"));
+		assert(contains(e.what(), "modulo with fractional values"));
 	}
 	
 	try
@@ -279,7 +279,7 @@ void Modulo_Tests()
 	}
 	catch (const std::exception& e)
 	{
-		assert(contains(e.what(), "mod by 0"));
+		assert(contains(e.what(), "modulo by zero"));
 	}
 	
 	firstValue = "124";
