@@ -1,0 +1,3 @@
+push int8(112)
+print
+exit

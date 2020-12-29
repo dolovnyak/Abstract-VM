@@ -1,6 +1,4 @@
 push int32(32)
-
 push int16(0)
-;koads
-div
+mod
 exit

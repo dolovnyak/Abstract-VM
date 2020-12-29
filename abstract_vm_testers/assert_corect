@@ -1,0 +1,4 @@
+push float(123.215)
+assert float(123.215)
+exit
+;;

@@ -1,0 +1,19 @@
+push int8(33)
+;!123123523434
+push int8(112)
+;53421
+push int8(111)
+;523453245
+push int8(108)
+push int8(112)
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+exit

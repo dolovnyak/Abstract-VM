@@ -48,7 +48,7 @@ std::string to_string(OperandType type, const std::string& value)
 
 std::string to_string(const IOperand& op)
 {
-	return "(type - " + to_string(op.GetType()) + " value - " + op.ToString() + ")";
+	return "(type - " + to_string(op.GetType()) + ", value - " + op.ToString() + ")";
 }
 
 int8_t stoi8(const std::string& value)
