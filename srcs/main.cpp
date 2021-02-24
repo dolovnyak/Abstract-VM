@@ -46,7 +46,11 @@ void runFromStandardOutput()
 	
 	while (true)
 	{
-		std::getline(std::cin, command);
+		if (!(std::getline(std::cin, command)))
+		{
+			std::cout << "unexpected eof" << std::endl;
+			exit(0);
+		}
 		
 		if (command.empty() || (command[0] == ';' && command != ";;"))
 			continue;
@@ -96,5 +100,5 @@ int main(int argc, char **argv)
 	else
 		std::cout << "incorrect number of arguments" << std::endl;
 	
-	return 0;
+	exit(0);
 }
