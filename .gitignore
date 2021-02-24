@@ -5,3 +5,4 @@
 abstract_vm
 avm
 objs
+*.DS_Store
