@@ -1,0 +1,8 @@
+*.idea
+*cmake-build-debug/
+*.dSYM
+*a.out
+abstract_vm
+avm
+objs
+*.DS_Store
