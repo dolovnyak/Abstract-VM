@@ -1,5 +1,8 @@
 # Abstract-VM
 
+## MacOS - [![Build Status](https://travis-ci.com/dolovnyak/Abstract-VM.svg?branch=master)](https://travis-ci.com/dolovnyak/Abstract-VM)
+###
+
 This program provide a stack to compute simple arithmetic expressions.
 -------------
 
@@ -48,9 +51,9 @@ Build and run on `MacOS`:
 cmake .
 make
 
-./avm example.txt
+./abstract_vm example.txt
 or
-./avm
+./abstract_vm
 push int32(124)
 push int8(12)
 sub
@@ -67,4 +70,59 @@ push int8(12)
 sub
 assert int32(112)
 exit
+```
+
+Examples:
+```
+./abstract_vm
+push int8(33)
+push int8(112)
+;comment
+push int8(111)
+push int8(108)
+push int8(112)
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+exit
+;;
+p
+l
+o
+p
+!
+```
+
+```
+example.txt:
+
+push int32(124)
+push int8(12)
+push int16(5324)
+push float (412.5213)
+push float(.9)
+push double(512.)
+dump
+add
+add
+mul
+add
+dump
+exit
+
+./abstract_vm example.txt
+512.00
+0.90
+412.52
+5324
+12
+124
+-4926831.01
 ```
