@@ -1,5 +1,8 @@
 # Abstract-VM
 
+## MacOS - [![Build Status](https://travis-ci.com/dolovnyak/Abstract-VM.svg?branch=master)](https://travis-ci.com/dolovnyak/Abstract-VM)
+###
+
 This program provide a stack to compute simple arithmetic expressions.
 -------------
 
