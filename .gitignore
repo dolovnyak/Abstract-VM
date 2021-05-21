@@ -3,6 +3,7 @@
 *.dSYM
 *a.out
 abstract_vm
+abstract_vm_tests
 avm
 objs
 *.DS_Store

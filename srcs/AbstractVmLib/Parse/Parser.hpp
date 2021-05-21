@@ -3,7 +3,6 @@
 #include "Lexer.hpp"
 #include "CommandList.hpp"
 
-
 enum InstructionType
 {
 	CommandWithValue = 0,	// word
