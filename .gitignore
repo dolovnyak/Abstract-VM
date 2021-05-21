@@ -7,3 +7,4 @@ abstract_vm_tests
 avm
 objs
 *.DS_Store
+build

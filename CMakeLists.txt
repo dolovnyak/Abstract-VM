@@ -18,7 +18,7 @@ add_library(${ABSTRACT_VM_LIB}
         srcs/AbstractVmLib/CommandList.cpp
         )
 target_include_directories(${ABSTRACT_VM_LIB} PUBLIC
-        srcs
+        srcs/AbstractVmLib
         srcs/AbstractVmLib/Operand
         srcs/AbstractVmLib/Parse)
 
