@@ -106,6 +106,7 @@ exit
 ```
 
 Examples:
+----------
 ```
 ./abstract_vm
 push int8(33)
