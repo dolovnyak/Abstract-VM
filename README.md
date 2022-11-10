@@ -1,8 +1,6 @@
 # Abstract-VM
 
-## MacOS - [![Build Status](https://travis-ci.com/dolovnyak/Abstract-VM.svg?branch=master)](https://travis-ci.com/dolovnyak/Abstract-VM)
-###
-[![Coverage Status](https://coveralls.io/repos/github/dolovnyak/Abstract-VM/badge.svg?branch=master)](https://coveralls.io/github/dolovnyak/Abstract-VM?branch=master)
+### MacOS - ![Build](https://github.com/dolovnyak/Abstract-VM/actions/workflows/build.yml/badge.svg?branch=master)
 
 This program provide a stack to compute simple arithmetic expressions.
 -------------
